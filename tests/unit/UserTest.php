@@ -2,59 +2,61 @@
 use App\Models\User;
 class UserTest extends \PHPUnit\Framework\TestCase
 {
-    private $first_name = 'karim';
-    private $last_name = 'ali';
-    private $email = 'karim@gmail.com';
-    private $full_name = 'karim ali';
-    public function testThatCanGetFirstName()
+    protected $user;
+
+    protected function setUp(): void
     {
-        $user = new User;
-        $user->setFirstName($this->first_name);
-        $this->assertEquals($this->first_name, $user->getFirstName());
+        $this->user = new User();
     }
 
-    public function testThatCanGetLastName()
+    /** @test */
+    public function that_we_can_get_first_name()
     {
-        $user = new User;
-        $user->setLastName($this->last_name);
-        $this->assertEquals($this->last_name, $user->getLastName());
+       
+        $this->user->setFirstName('karim');
+        $this->assertEquals($this->user->getFirstName(), 'karim');
     }
-
-    public function testFullNameisReturned(){
-        $user = new User;
-        $user->setFirstName($this->first_name);
-        $user->setLastName($this->last_name);
-        $this->assertEquals($this->full_name, $user->getFullName());
+    /** @test */
+    public function that_can_get_last_name()
+    {
+        $this->user->setLastName('ali');
+        $this->assertEquals($this->user->getLastName(), 'ali');
     }
-
-    public function testFirstAndLastNameAreTrimmed(){
-        $user = new User;
-        $user->setFirstName(" $this->first_name ");
-        $user->setLastName(" $this->last_name ");
-        $this->assertEquals($this->first_name, $user->getFirstName());
-        $this->assertEquals($this->last_name, $user->getLastName());
+    /** @test */
+    public function full_name_is_returned(){
+    
+        $this->user->setFirstName('karim');
+        $this->user->setLastName('ali');
+        $this->assertEquals($this->user->getFullName(), 'karim ali');
     }
+    /** @test */
+    public function first_and_last_name_are_trimmed(){
+        $this->user->setFirstName(" karim ");
+        $this->user->setLastName(" ali ");
+        $this->assertEquals($this->user->getFirstName(), 'karim');
+        $this->assertEquals($this->user->getLastName(), 'ali');
 
-    public function testEmailAddressCanBeSet(){
-        $user = new User;
-        $user->setEmail($this->email);
-        $this->assertEquals($this->email, $user->getEmail());
     }
+    /** @test */
+    public function email_address_can_be_set(){
+        $this->user->setEmail('karim@gmail.com');
+        $this->assertEquals($this->user->getEmail(), 'karim@gmail.com');
+    }
+    /** @test */
+    public function email_variables_contains_correct_values(){
 
-    public function testEmailVariablesContainsCorrectValues(){
-        $user = new User;
-        $user->setFirstName('karim');
-        $user->setLastName('ali');
-        $user->setEmail('karim@gmail.com');
+        $this->user->setFirstName('karim');
+        $this->user->setLastName('ali');
+        $this->user->setEmail('karim@gmail.com');
 
-        $emailVariables = $user->getEmailVariables();
+        $emailVariables = $this->user->getEmailVariables();
 
-        
+
         $this->assertArrayHasKey('full_name', $emailVariables);
         $this->assertArrayHasKey('email', $emailVariables);
 
-        $this->assertEquals($this->full_name, $emailVariables['full_name']);
-        $this->assertEquals($this->email, $emailVariables['email']);
+        $this->assertEquals('karim ali', $emailVariables['full_name']);
+        $this->assertEquals('karim@gmail.com', $emailVariables['email']);
 
         
     }
